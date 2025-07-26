@@ -47,7 +47,7 @@ function App() {
       setBreakCount(newBreakCount);
       setBreaks((prevBreaks) => [
         ...prevBreaks,
-        { id: newBreakCount, time: formatTime() },
+        { id: newBreakCount, time: formatTime(), rawTime: time }, // store rawTime
       ]);
     }
   };
@@ -126,7 +126,6 @@ function App() {
   return (
     <>
       <div className="bg-gray-900 min-h-screen w-full flex justify-center relative">
-        {/* Stopwatch - bottom right on mobile and md, top right only on desktop */}
         <div className="absolute bottom-4 right-4 md:bottom-4 md:right-4 lg:bottom-auto lg:top-4 bg-white p-3 sm:p-4 rounded-lg shadow-lg w-[90%] max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-xs z-10">
           <div className="text-xl sm:text-2xl font-mono mb-2 text-center">
             {formatTime()}
@@ -163,17 +162,34 @@ function App() {
             <div className="mt-2 border-t pt-2">
               <h3 className="text-xl sm:text-md font-semibold mb-1">Breaks:</h3>
               <div className="max-h-32 sm:max-h-40 overflow-y-auto">
-                {breaks.map((breakItem) => (
-                  <div
-                    key={breakItem.id}
-                    className="text-[10px] sm:text-md font-mono mb-1 flex flex-wrap sm:flex-nowrap"
-                  >
-                    <span className="text-sm font-mono">
-                      Break {breakItem.id}:
-                    </span>
-                    <span className="ml-1 text-sm">{breakItem.time}</span>
-                  </div>
-                ))}
+                {breaks.map((breakItem, idx) => {
+                  // Calculate duration since previous break
+                  let duration = breakItem.rawTime;
+                  if (idx > 0) {
+                    duration = breakItem.rawTime - breaks[idx - 1].rawTime;
+                  }
+                  // Format duration
+                  const formatDuration = (ms) => {
+                    const minutes = Math.floor(ms / 60000);
+                    const seconds = Math.floor((ms % 60000) / 1000);
+                    const milliseconds = Math.floor((ms % 1000) / 10);
+                    return `${minutes.toString().padStart(2, "0")}:${seconds
+                      .toString()
+                      .padStart(2, "0")}:${milliseconds.toString().padStart(2, "0")}`;
+                  };
+                  return (
+                    <div
+                      key={breakItem.id}
+                      className="text-[10px] sm:text-md font-mono mb-1 flex flex-wrap sm:flex-nowrap"
+                    >
+                      <span className="text-sm font-mono">
+                        Break {breakItem.id}:
+                      </span>
+                      <span className="ml-1 text-sm">{breakItem.time}</span>
+                      <span className="ml-2 text-xs text-gray-500">(Session: {formatDuration(duration)})</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -182,7 +198,7 @@ function App() {
         <div className="flex flex-col items-center px-4 sm:px-6 md:px-8 mt-16 sm:mt-10 md:mt-0 mb-32 sm:mb-32 md:mb-32 lg:mb-0">
           <div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white my-6 sm:my-8 md:my-10 font-mono text-center">
-              Draw your Reward
+              Break Rewards
             </h1>
           </div>
           <div className="flex justify-center mb-4 sm:mb-6 gap-3 sm:gap-5 my-6 sm:my-8 md:my-10">
