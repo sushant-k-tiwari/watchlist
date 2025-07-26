@@ -134,7 +134,7 @@ function App() {
           <div className="flex flex-wrap sm:flex-nowrap gap-1 sm:gap-2 mb-3 justify-center">
             <button
               onClick={startStopwatch}
-              className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base ${
+              className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base cursor-pointer ${
                 isRunning ? "bg-gray-300" : "bg-green-500 text-white"
               }`}
               disabled={isRunning}
@@ -143,7 +143,7 @@ function App() {
             </button>
             <button
               onClick={pauseStopwatch}
-              className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base ${
+              className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base cursor-pointer ${
                 !isRunning ? "bg-gray-300" : "bg-yellow-500 text-white"
               }`}
               disabled={!isRunning}
@@ -152,7 +152,7 @@ function App() {
             </button>
             <button
               onClick={resetStopwatch}
-              className="px-2 sm:px-3 py-1 rounded text-sm sm:text-base bg-red-500 text-white"
+              className="px-2 sm:px-3 py-1 rounded text-sm sm:text-base bg-red-500 text-white cursor-pointer"
             >
               Reset
             </button>
@@ -188,13 +188,13 @@ function App() {
           <div className="flex justify-center mb-4 sm:mb-6 gap-3 sm:gap-5 my-6 sm:my-8 md:my-10">
             <button
               onClick={drawRandom}
-              className="bg-white rounded-md px-4 py-2 sm:p-3 text-sm sm:text-base text-black hover:bg-gray-300 transition-colors w-[100px]"
+              className="bg-white cursor-pointer rounded-md px-4 py-2 sm:p-3 text-sm sm:text-base text-black hover:bg-gray-300 transition-colors w-[100px]"
             >
               Draw
             </button>
             <button
               onClick={reset}
-              className="bg-white rounded-md px-4 py-2 sm:p-3 text-sm sm:text-base hover:bg-gray-300 transition-colors w-[100px]"
+              className="bg-white cursor-pointer rounded-md px-4 py-2 sm:p-3 text-sm sm:text-base hover:bg-gray-300 transition-colors w-[100px]"
             >
               Reset
             </button>
