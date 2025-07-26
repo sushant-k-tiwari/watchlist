@@ -30,7 +30,7 @@ function App() {
       <div className="bg-gray-900 min-h-screen w-full flex justify-center">
         <div className="flex flex-col items-center">
           <div>
-            <h1 className="text-5xl font-bold text-white my-10 font-mono">
+            <h1 className="lg:text-5xl font-bold text-white my-10 font-mono md:text-3xl sm: text-3xl">
               Draw your Reward
             </h1>
           </div>
