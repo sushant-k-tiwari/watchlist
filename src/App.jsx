@@ -7,6 +7,8 @@ function App() {
   // Stopwatch state
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [breaks, setBreaks] = useState([]);
+  const [breakCount, setBreakCount] = useState(0);
   const intervalRef = useRef(null);
   const drawRandom = () => {
     const index = Math.floor(Math.random() * 10);
@@ -28,12 +30,18 @@ function App() {
   const pauseStopwatch = () => {
     if (isRunning) {
       setIsRunning(false);
+      // Add a new break with current time
+      const newBreakCount = breakCount + 1;
+      setBreakCount(newBreakCount);
+      setBreaks(prevBreaks => [...prevBreaks, { id: newBreakCount, time: formatTime() }]);
     }
   };
   
   const resetStopwatch = () => {
     setIsRunning(false);
     setTime(0);
+    setBreaks([]);
+    setBreakCount(0);
   };
   
   // Format time to display as MM:SS:MS
@@ -77,10 +85,10 @@ function App() {
   return (
     <>
       <div className="bg-gray-900 min-h-screen w-full flex justify-center relative">
-        {/* Stopwatch in bottom right corner */}
-        <div className="absolute bottom-4 right-4 bg-white p-4 rounded-lg shadow-lg">
+        {/* Stopwatch in top right corner */}
+        <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg max-w-xs">
           <div className="text-2xl font-mono mb-2 text-center">{formatTime()}</div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 mb-3">
             <button 
               onClick={startStopwatch} 
               className={`px-3 py-1 rounded ${isRunning ? 'bg-gray-300' : 'bg-green-500 text-white'}`}
@@ -102,6 +110,21 @@ function App() {
               Reset
             </button>
           </div>
+          
+          {/* Break history */}
+          {breaks.length > 0 && (
+            <div className="mt-2 border-t pt-2">
+              <h3 className="text-sm font-semibold mb-1">Breaks:</h3>
+              <div className="max-h-40 overflow-y-auto">
+                {breaks.map(breakItem => (
+                  <div key={breakItem.id} className="text-xs mb-1 flex">
+                    <span className="font-medium">Break {breakItem.id}:</span>
+                    <span className="ml-1">{breakItem.time}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         
         <div className="flex flex-col items-center">
