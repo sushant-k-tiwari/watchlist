@@ -5,10 +5,22 @@ function App() {
   const [hasDrawn, setHasDrawn] = useState(false);
 
   // Stopwatch state
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(() => {
+    // Load time from localStorage on component mount
+    const savedTime = localStorage.getItem('stopwatchTime');
+    return savedTime ? parseInt(savedTime) : 0;
+  });
   const [isRunning, setIsRunning] = useState(false);
-  const [breaks, setBreaks] = useState([]);
-  const [breakCount, setBreakCount] = useState(0);
+  const [breaks, setBreaks] = useState(() => {
+    // Load breaks from localStorage on component mount
+    const savedBreaks = localStorage.getItem('stopwatchBreaks');
+    return savedBreaks ? JSON.parse(savedBreaks) : [];
+  });
+  const [breakCount, setBreakCount] = useState(() => {
+    // Load breakCount from localStorage on component mount
+    const savedBreakCount = localStorage.getItem('stopwatchBreakCount');
+    return savedBreakCount ? parseInt(savedBreakCount) : 0;
+  });
   const intervalRef = useRef(null);
   const drawRandom = () => {
     const index = Math.floor(Math.random() * 15);
@@ -45,6 +57,10 @@ function App() {
     setTime(0);
     setBreaks([]);
     setBreakCount(0);
+    // Clear localStorage when resetting
+    localStorage.removeItem('stopwatchBreaks');
+    localStorage.removeItem('stopwatchBreakCount');
+    localStorage.removeItem('stopwatchTime'); // <-- clear time
   };
 
   // Format time to display as MM:SS:MS
@@ -74,6 +90,21 @@ function App() {
       }
     };
   }, [isRunning]);
+  
+  // Save breaks to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('stopwatchBreaks', JSON.stringify(breaks));
+  }, [breaks]);
+  
+  // Save breakCount to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('stopwatchBreakCount', breakCount.toString());
+  }, [breakCount]);
+
+  // Save time to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('stopwatchTime', time.toString());
+  }, [time]);
 
   const rewards = [
     "Do Nothing",
