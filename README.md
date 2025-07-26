@@ -1,12 +1,79 @@
-# React + Vite
+# Draw Your Reward
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple, fun web app to help you decide what to do during your break! 🎲
 
-Currently, two official plugins are available:
+This project solves the problem of indecision by letting you draw a random reward activity—like watching YouTube, reading a book, or just doing nothing—at the click of a button.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- 🎁 **Random Reward Generator**: Click "Draw" to get a random break activity.
+- 🔄 **Reset Option**: Clear your result and draw again.
+- 🎨 **Modern UI**: Built with React, Vite, and styled using Tailwind CSS.
+- 🖥️ **Responsive Design**: Works great on desktop and mobile.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Demo
+
+![App Screenshot](public/image.png)
+
+## Getting Started
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v16+ recommended)
+- [npm](https://www.npmjs.com/) (comes with Node.js)
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repo-url>
+   cd rewards
+   ```
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+4. **Open your browser:**
+   Visit [http://localhost:5173](http://localhost:5173) (or the URL shown in your terminal)
+
+## Usage
+
+- Click the **Draw** button to randomly select a reward for your break.
+- The selected reward will be displayed in a card.
+- Click **Reset** to clear the result and draw again.
+
+## Customization
+
+Want to add your own rewards?
+- Edit the `rewards` array in [`src/App.jsx`](src/App.jsx) to include your favorite break activities!
+
+## Tech Stack
+- [React](https://react.dev/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+## Project Structure
+
+```
+rewards/
+├── public/           # Static assets
+├── src/
+│   ├── App.jsx       # Main app component
+│   ├── main.jsx      # Entry point
+│   ├── index.css     # Tailwind CSS import
+│   └── assets/       # Images, icons
+├── index.html        # HTML template
+├── package.json      # Project metadata & scripts
+└── README.md         # This file
+```
+
+## Scripts
+- `npm run dev` — Start development server
+- `npm run build` — Build for production
+- `npm run preview` — Preview production build
+- `npm run lint` — Lint code
+
+
