@@ -5,22 +5,27 @@ function App() {
   const [hasDrawn, setHasDrawn] = useState(false);
 
   // Stopwatch state
-  const [time, setTime] = useState(() => {
-    // Load time from localStorage on component mount
-    const savedTime = localStorage.getItem('stopwatchTime');
-    return savedTime ? parseInt(savedTime) : 0;
+  const [accumulatedTime, setAccumulatedTime] = useState(() => {
+    const saved = localStorage.getItem('stopwatchAccumulatedTime');
+    return saved ? parseInt(saved) : 0;
   });
-  const [isRunning, setIsRunning] = useState(false);
+  const [startTimestamp, setStartTimestamp] = useState(() => {
+    const saved = localStorage.getItem('stopwatchStartTimestamp');
+    return saved ? parseInt(saved) : null;
+  });
+  const [isRunning, setIsRunning] = useState(() => {
+    const saved = localStorage.getItem('stopwatchIsRunning');
+    return saved === 'true';
+  });
   const [breaks, setBreaks] = useState(() => {
-    // Load breaks from localStorage on component mount
     const savedBreaks = localStorage.getItem('stopwatchBreaks');
     return savedBreaks ? JSON.parse(savedBreaks) : [];
   });
   const [breakCount, setBreakCount] = useState(() => {
-    // Load breakCount from localStorage on component mount
     const savedBreakCount = localStorage.getItem('stopwatchBreakCount');
     return savedBreakCount ? parseInt(savedBreakCount) : 0;
   });
+  const [displayTime, setDisplayTime] = useState(0);
   const intervalRef = useRef(null);
   const drawRandom = () => {
     const index = Math.floor(Math.random() * 15);
@@ -35,40 +40,48 @@ function App() {
   // Stopwatch functions
   const startStopwatch = () => {
     if (!isRunning) {
+      setStartTimestamp(Date.now());
       setIsRunning(true);
     }
   };
 
   const pauseStopwatch = () => {
     if (isRunning) {
+      const now = Date.now();
+      const elapsed = (startTimestamp ? now - startTimestamp : 0) + accumulatedTime;
+      setAccumulatedTime(elapsed);
       setIsRunning(false);
+      setStartTimestamp(null);
       // Add a new break with current time
       const newBreakCount = breakCount + 1;
       setBreakCount(newBreakCount);
       setBreaks((prevBreaks) => [
         ...prevBreaks,
-        { id: newBreakCount, time: formatTime(), rawTime: time }, // store rawTime
+        { id: newBreakCount, time: formatTime(elapsed), rawTime: elapsed },
       ]);
     }
   };
 
   const resetStopwatch = () => {
     setIsRunning(false);
-    setTime(0);
+    setAccumulatedTime(0);
+    setStartTimestamp(null);
+    setDisplayTime(0);
     setBreaks([]);
     setBreakCount(0);
     // Clear localStorage when resetting
     localStorage.removeItem('stopwatchBreaks');
     localStorage.removeItem('stopwatchBreakCount');
-    localStorage.removeItem('stopwatchTime'); // <-- clear time
+    localStorage.removeItem('stopwatchAccumulatedTime');
+    localStorage.removeItem('stopwatchStartTimestamp');
+    localStorage.removeItem('stopwatchIsRunning');
   };
 
   // Format time to display as MM:SS:MS
-  const formatTime = () => {
-    const minutes = Math.floor(time / 60000);
-    const seconds = Math.floor((time % 60000) / 1000);
-    const milliseconds = Math.floor((time % 1000) / 10);
-
+  const formatTime = (ms) => {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = Math.floor((ms % 60000) / 1000);
+    const milliseconds = Math.floor((ms % 1000) / 10);
     return `${minutes.toString().padStart(2, "0")}:${seconds
       .toString()
       .padStart(2, "0")}:${milliseconds.toString().padStart(2, "0")}`;
@@ -78,33 +91,47 @@ function App() {
   useEffect(() => {
     if (isRunning) {
       intervalRef.current = setInterval(() => {
-        setTime((prevTime) => prevTime + 10);
+        const now = Date.now();
+        const elapsed = (startTimestamp ? now - startTimestamp : 0) + accumulatedTime;
+        setDisplayTime(elapsed);
       }, 10);
-    } else if (intervalRef.current) {
-      clearInterval(intervalRef.current);
+    } else {
+      setDisplayTime(accumulatedTime);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
     }
-
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isRunning]);
-  
-  // Save breaks to localStorage whenever they change
+  }, [isRunning, startTimestamp, accumulatedTime]);
+
+  // Save states to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('stopwatchBreaks', JSON.stringify(breaks));
   }, [breaks]);
-  
-  // Save breakCount to localStorage whenever it changes
+
   useEffect(() => {
     localStorage.setItem('stopwatchBreakCount', breakCount.toString());
   }, [breakCount]);
 
-  // Save time to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('stopwatchTime', time.toString());
-  }, [time]);
+    localStorage.setItem('stopwatchAccumulatedTime', accumulatedTime.toString());
+  }, [accumulatedTime]);
+
+  useEffect(() => {
+    if (startTimestamp !== null) {
+      localStorage.setItem('stopwatchStartTimestamp', startTimestamp.toString());
+    } else {
+      localStorage.removeItem('stopwatchStartTimestamp');
+    }
+  }, [startTimestamp]);
+
+  useEffect(() => {
+    localStorage.setItem('stopwatchIsRunning', isRunning.toString());
+  }, [isRunning]);
 
   const rewards = [
     "Do Nothing",
@@ -128,7 +155,7 @@ function App() {
       <div className="bg-gray-900 min-h-screen w-full flex justify-center relative">
         <div className="absolute bottom-4 right-4 md:bottom-4 md:right-4 lg:bottom-auto lg:top-4 bg-white p-3 sm:p-4 rounded-lg shadow-lg w-[90%] max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-xs z-10">
           <div className="text-xl sm:text-2xl font-mono mb-2 text-center">
-            {formatTime()}
+            {formatTime(displayTime)}
           </div>
           <div className="flex flex-wrap sm:flex-nowrap gap-1 sm:gap-2 mb-3 justify-center">
             <button
