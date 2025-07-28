@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import Todo from "./Todo";
 
 function App() {
   const [findIndex, setFindIndex] = useState(0);
@@ -57,7 +58,7 @@ function App() {
       setBreakCount(newBreakCount);
       setBreaks((prevBreaks) => [
         ...prevBreaks,
-        { id: newBreakCount, time: formatTime(elapsed), rawTime: elapsed },
+        { id: newBreakCount, time: formatDurationPlain(elapsed), rawTime: elapsed },
       ]);
     }
   };
@@ -77,14 +78,31 @@ function App() {
     localStorage.removeItem('stopwatchIsRunning');
   };
 
-  // Format time to display as MM:SS:MS
-  const formatTime = (ms) => {
-    const minutes = Math.floor(ms / 60000);
+  // Format time to display as HH:MM:SS and milliseconds separately
+  const formatTimeParts = (ms) => {
+    const hours = Math.floor(ms / 3600000);
+    const minutes = Math.floor((ms % 3600000) / 60000);
     const seconds = Math.floor((ms % 60000) / 1000);
     const milliseconds = Math.floor((ms % 1000) / 10);
-    return `${minutes.toString().padStart(2, "0")}:${seconds
+    return {
+      hours: hours.toString().padStart(2, "0"),
+      minutes: minutes.toString().padStart(2, "0"),
+      seconds: seconds.toString().padStart(2, "0"),
+      ms: milliseconds.toString().padStart(2, "0"),
+    };
+  };
+
+  // Format duration as hh:mm:ss.ms (for breaks and pause)
+  const formatDurationPlain = (ms) => {
+    const hours = Math.floor(ms / 3600000);
+    const minutes = Math.floor((ms % 3600000) / 60000);
+    const seconds = Math.floor((ms % 60000) / 1000);
+    const milliseconds = Math.floor((ms % 1000) / 10);
+    return `${hours.toString().padStart(2, "0")}:${minutes
       .toString()
-      .padStart(2, "0")}:${milliseconds.toString().padStart(2, "0")}`;
+      .padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}.${milliseconds.toString().padStart(2, "0")}`;
   };
 
   // Effect for stopwatch
@@ -153,9 +171,19 @@ function App() {
   return (
     <>
       <div className="bg-gray-900 min-h-screen w-full flex justify-center relative">
+        {/* Todo Card - bottom left */}
+        <Todo />
+        {/* Stopwatch Card - bottom right */}
         <div className="absolute bottom-4 right-4 md:bottom-4 md:right-4 lg:bottom-auto lg:top-4 bg-white p-3 sm:p-4 rounded-lg shadow-lg w-[90%] max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-xs z-10">
           <div className="text-xl sm:text-2xl font-mono mb-2 text-center">
-            {formatTime(displayTime)}
+            {(() => {
+              const t = formatTimeParts(displayTime);
+              return (
+                <span>
+                  {t.hours}:{t.minutes}:{t.seconds}
+                </span>
+              );
+            })()}
           </div>
           <div className="flex flex-wrap sm:flex-nowrap gap-1 sm:gap-2 mb-3 justify-center">
             <button
@@ -197,13 +225,18 @@ function App() {
                   }
                   // Format duration
                   const formatDuration = (ms) => {
-                    const minutes = Math.floor(ms / 60000);
+                    const hours = Math.floor(ms / 3600000);
+                    const minutes = Math.floor((ms % 3600000) / 60000);
                     const seconds = Math.floor((ms % 60000) / 1000);
                     const milliseconds = Math.floor((ms % 1000) / 10);
-                    return `${minutes.toString().padStart(2, "0")}:${seconds
+                    return `${hours.toString().padStart(2, "0")}:${minutes
                       .toString()
-                      .padStart(2, "0")}:${milliseconds.toString().padStart(2, "0")}`;
+                      .padStart(2, "0")}:${seconds
+                      .toString()
+                      .padStart(2, "0")}.` +
+                      `<span class="text-xs align-top ml-1">${milliseconds.toString().padStart(2, "0")}</span>`;
                   };
+                  // Use global formatDurationPlain
                   return (
                     <div
                       key={breakItem.id}
@@ -212,8 +245,8 @@ function App() {
                       <span className="text-sm font-mono">
                         Break {breakItem.id}:
                       </span>
-                      <span className="ml-1 text-sm">{breakItem.time}</span>
-                      <span className="ml-2 text-xs text-gray-500">(Session: {formatDuration(duration)})</span>
+                      <span className="ml-1 text-sm">{formatDurationPlain(breakItem.rawTime)}</span>
+                      <span className="ml-2 text-xs text-gray-500">(Session: {formatDurationPlain(duration)})</span>
                     </div>
                   );
                 })}
