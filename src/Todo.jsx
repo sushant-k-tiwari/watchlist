@@ -70,7 +70,7 @@ function Todo() {
           onKeyDown={handleKeyDown}
         />
         <button
-          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+          className="bg-blue-500 cursor-pointer text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
           onClick={addTodo}
         >
           Add
@@ -89,7 +89,7 @@ function Todo() {
               type="checkbox"
               checked={todo.completed}
               onChange={() => toggleTodo(todo.id)}
-              className="accent-blue-500"
+              className="accent-blue-500 cursor-pointer"
             />
             {editId === todo.id ? (
               <>
@@ -104,7 +104,7 @@ function Todo() {
                   autoFocus
                 />
                 <button
-                  className="text-xs text-green-600 font-bold px-1"
+                  className="text-xs cursor-pointer text-green-600 font-bold px-1"
                   onClick={() => saveEdit(todo.id)}
                 >
                   Save
@@ -120,14 +120,14 @@ function Todo() {
                   {todo.text}
                 </span>
                 <button
-                  className="text-xs text-red-500 font-bold px-1"
+                  className="text-xs cursor-pointer text-red-500 font-bold px-1"
                   onClick={() => deleteTodo(todo.id)}
                   title="Delete"
                 >
                   Delete
                 </button>
                 <button
-                  className="text-xs text-blue-500 font-bold px-1"
+                  className="text-xs cursor-pointer text-blue-500 font-bold px-1"
                   onClick={() => startEdit(todo.id, todo.text)}
                   title="Edit"
                 >
