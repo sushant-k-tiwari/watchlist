@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Todo from "./Todo";
 
+
 function App() {
   const [findIndex, setFindIndex] = useState(0);
   const [hasDrawn, setHasDrawn] = useState(false);
@@ -174,7 +175,7 @@ function App() {
         {/* Todo Card - bottom left */}
         <Todo />
         {/* Stopwatch Card - bottom right */}
-        <div className="absolute bottom-4 right-4 md:bottom-4 md:right-4 lg:bottom-auto lg:top-4 bg-white p-3 sm:p-4 rounded-lg shadow-lg w-[90%] max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-xs z-10">
+        <div className="absolute bottom-4 right-4 md:bottom-4 md:right-4 lg:bottom-auto lg:top-4 bg-white p-3 sm:p-4 rounded-lg shadow-lg w-[90%] max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-s z-10">
           <div className="text-xl sm:text-2xl font-mono mb-2 text-center">
             {(() => {
               const t = formatTimeParts(displayTime);
@@ -254,6 +255,8 @@ function App() {
             </div>
           )}
         </div>
+
+       
 
         <div className="flex flex-col items-center px-4 sm:px-6 md:px-8 mt-16 sm:mt-10 md:mt-0 mb-32 sm:mb-32 md:mb-32 lg:mb-0">
           <div>
