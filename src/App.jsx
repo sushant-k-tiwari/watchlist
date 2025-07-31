@@ -193,7 +193,7 @@ function App() {
               const t = formatTimeParts(displayTime);
               return (
                 <span>
-                  {t.hours}:{t.minutes}:{t.seconds}
+                  {t.hours}h:{t.minutes}m:{t.seconds}s
                 </span>
               );
             })()}
