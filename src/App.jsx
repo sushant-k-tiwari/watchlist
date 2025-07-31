@@ -155,16 +155,16 @@ function App() {
   const rewards = [
     "Do Nothing",
     "Watch Youtube",
-    "Do Nothing",
+    "Read Documentations",
     "Watch Movies",
     "Do Nothing",
     "Read a Book",
-    "Do Nothing",
+    "Watch Anime",
     "Social Media",
     "Do Nothing",
     "Read a Book",
     "Watch Series",
-    "Do Nothing",
+    "Read Documentations",
     "Work on Fun Projects",
     "Do Nothing",
     "Work on Fun Projects",
@@ -295,3 +295,5 @@ function App() {
 }
 
 export default App;
+
+
