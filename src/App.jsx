@@ -1,30 +1,29 @@
 import { useState, useEffect, useRef } from "react";
 import Todo from "./Todo";
 
-
 function App() {
   const [findIndex, setFindIndex] = useState(0);
   const [hasDrawn, setHasDrawn] = useState(false);
 
   // Stopwatch state
   const [accumulatedTime, setAccumulatedTime] = useState(() => {
-    const saved = localStorage.getItem('stopwatchAccumulatedTime');
+    const saved = localStorage.getItem("stopwatchAccumulatedTime");
     return saved ? parseInt(saved) : 0;
   });
   const [startTimestamp, setStartTimestamp] = useState(() => {
-    const saved = localStorage.getItem('stopwatchStartTimestamp');
+    const saved = localStorage.getItem("stopwatchStartTimestamp");
     return saved ? parseInt(saved) : null;
   });
   const [isRunning, setIsRunning] = useState(() => {
-    const saved = localStorage.getItem('stopwatchIsRunning');
-    return saved === 'true';
+    const saved = localStorage.getItem("stopwatchIsRunning");
+    return saved === "true";
   });
   const [breaks, setBreaks] = useState(() => {
-    const savedBreaks = localStorage.getItem('stopwatchBreaks');
+    const savedBreaks = localStorage.getItem("stopwatchBreaks");
     return savedBreaks ? JSON.parse(savedBreaks) : [];
   });
   const [breakCount, setBreakCount] = useState(() => {
-    const savedBreakCount = localStorage.getItem('stopwatchBreakCount');
+    const savedBreakCount = localStorage.getItem("stopwatchBreakCount");
     return savedBreakCount ? parseInt(savedBreakCount) : 0;
   });
   const [displayTime, setDisplayTime] = useState(0);
@@ -50,7 +49,8 @@ function App() {
   const pauseStopwatch = () => {
     if (isRunning) {
       const now = Date.now();
-      const elapsed = (startTimestamp ? now - startTimestamp : 0) + accumulatedTime;
+      const elapsed =
+        (startTimestamp ? now - startTimestamp : 0) + accumulatedTime;
       setAccumulatedTime(elapsed);
       setIsRunning(false);
       setStartTimestamp(null);
@@ -59,7 +59,11 @@ function App() {
       setBreakCount(newBreakCount);
       setBreaks((prevBreaks) => [
         ...prevBreaks,
-        { id: newBreakCount, time: formatDurationPlain(elapsed), rawTime: elapsed },
+        {
+          id: newBreakCount,
+          time: formatDurationPlain(elapsed),
+          rawTime: elapsed,
+        },
       ]);
     }
   };
@@ -72,11 +76,11 @@ function App() {
     setBreaks([]);
     setBreakCount(0);
     // Clear localStorage when resetting
-    localStorage.removeItem('stopwatchBreaks');
-    localStorage.removeItem('stopwatchBreakCount');
-    localStorage.removeItem('stopwatchAccumulatedTime');
-    localStorage.removeItem('stopwatchStartTimestamp');
-    localStorage.removeItem('stopwatchIsRunning');
+    localStorage.removeItem("stopwatchBreaks");
+    localStorage.removeItem("stopwatchBreakCount");
+    localStorage.removeItem("stopwatchAccumulatedTime");
+    localStorage.removeItem("stopwatchStartTimestamp");
+    localStorage.removeItem("stopwatchIsRunning");
   };
 
   // Format time to display as HH:MM:SS and milliseconds separately
@@ -101,9 +105,9 @@ function App() {
     const milliseconds = Math.floor((ms % 1000) / 10);
     return `${hours.toString().padStart(2, "0")}:${minutes
       .toString()
-      .padStart(2, "0")}:${seconds
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${milliseconds
       .toString()
-      .padStart(2, "0")}.${milliseconds.toString().padStart(2, "0")}`;
+      .padStart(2, "0")}`;
   };
 
   // Effect for stopwatch
@@ -111,7 +115,8 @@ function App() {
     if (isRunning) {
       intervalRef.current = setInterval(() => {
         const now = Date.now();
-        const elapsed = (startTimestamp ? now - startTimestamp : 0) + accumulatedTime;
+        const elapsed =
+          (startTimestamp ? now - startTimestamp : 0) + accumulatedTime;
         setDisplayTime(elapsed);
       }, 10);
     } else {
@@ -129,27 +134,33 @@ function App() {
 
   // Save states to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('stopwatchBreaks', JSON.stringify(breaks));
+    localStorage.setItem("stopwatchBreaks", JSON.stringify(breaks));
   }, [breaks]);
 
   useEffect(() => {
-    localStorage.setItem('stopwatchBreakCount', breakCount.toString());
+    localStorage.setItem("stopwatchBreakCount", breakCount.toString());
   }, [breakCount]);
 
   useEffect(() => {
-    localStorage.setItem('stopwatchAccumulatedTime', accumulatedTime.toString());
+    localStorage.setItem(
+      "stopwatchAccumulatedTime",
+      accumulatedTime.toString()
+    );
   }, [accumulatedTime]);
 
   useEffect(() => {
     if (startTimestamp !== null) {
-      localStorage.setItem('stopwatchStartTimestamp', startTimestamp.toString());
+      localStorage.setItem(
+        "stopwatchStartTimestamp",
+        startTimestamp.toString()
+      );
     } else {
-      localStorage.removeItem('stopwatchStartTimestamp');
+      localStorage.removeItem("stopwatchStartTimestamp");
     }
   }, [startTimestamp]);
 
   useEffect(() => {
-    localStorage.setItem('stopwatchIsRunning', isRunning.toString());
+    localStorage.setItem("stopwatchIsRunning", isRunning.toString());
   }, [isRunning]);
 
   const rewards = [
@@ -157,7 +168,7 @@ function App() {
     "Watch Youtube",
     "Read Documentations",
     "Watch Movies",
-    "Do Nothing",
+    "Read News",
     "Read a Book",
     "Watch Anime",
     "Social Media",
@@ -173,6 +184,7 @@ function App() {
     <>
       <div className="bg-gray-900 min-h-screen w-full flex justify-center relative">
         {/* Todo Card - bottom left */}
+
         <Todo />
         {/* Stopwatch Card - bottom right */}
         <div className="absolute bottom-4 right-4 md:bottom-4 md:right-4 lg:bottom-auto lg:top-4 bg-white p-3 sm:p-4 rounded-lg shadow-lg w-[90%] max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-s z-10">
@@ -230,12 +242,16 @@ function App() {
                     const minutes = Math.floor((ms % 3600000) / 60000);
                     const seconds = Math.floor((ms % 60000) / 1000);
                     const milliseconds = Math.floor((ms % 1000) / 10);
-                    return `${hours.toString().padStart(2, "0")}:${minutes
-                      .toString()
-                      .padStart(2, "0")}:${seconds
-                      .toString()
-                      .padStart(2, "0")}.` +
-                      `<span class="text-xs align-top ml-1">${milliseconds.toString().padStart(2, "0")}</span>`;
+                    return (
+                      `${hours.toString().padStart(2, "0")}:${minutes
+                        .toString()
+                        .padStart(2, "0")}:${seconds
+                        .toString()
+                        .padStart(2, "0")}.` +
+                      `<span class="text-xs align-top ml-1">${milliseconds
+                        .toString()
+                        .padStart(2, "0")}</span>`
+                    );
                   };
                   // Use global formatDurationPlain
                   return (
@@ -246,8 +262,12 @@ function App() {
                       <span className="text-sm font-mono">
                         Break {breakItem.id}:
                       </span>
-                      <span className="ml-1 text-sm">{formatDurationPlain(breakItem.rawTime)}</span>
-                      <span className="ml-2 text-xs text-gray-500">(Session: {formatDurationPlain(duration)})</span>
+                      <span className="ml-1 text-sm">
+                        {formatDurationPlain(breakItem.rawTime)}
+                      </span>
+                      <span className="ml-2 text-xs text-gray-500">
+                        (Session: {formatDurationPlain(duration)})
+                      </span>
                     </div>
                   );
                 })}
@@ -255,8 +275,6 @@ function App() {
             </div>
           )}
         </div>
-
-       
 
         <div className="flex flex-col items-center px-4 sm:px-6 md:px-8 mt-16 sm:mt-10 md:mt-0 mb-32 sm:mb-32 md:mb-32 lg:mb-0">
           <div>
@@ -295,5 +313,3 @@ function App() {
 }
 
 export default App;
-
-
