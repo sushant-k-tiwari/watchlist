@@ -1,206 +1,105 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 
 function App() {
   const [findIndex, setFindIndex] = useState(0);
   const [hasDrawn, setHasDrawn] = useState(false);
 
-  // Stopwatch state
-  const [time, setTime] = useState(() => {
-    // Load time from localStorage on component mount
-    const savedTime = localStorage.getItem('stopwatchTime');
-    return savedTime ? parseInt(savedTime) : 0;
-  });
-  const [isRunning, setIsRunning] = useState(false);
-  const [breaks, setBreaks] = useState(() => {
-    // Load breaks from localStorage on component mount
-    const savedBreaks = localStorage.getItem('stopwatchBreaks');
-    return savedBreaks ? JSON.parse(savedBreaks) : [];
-  });
-  const [breakCount, setBreakCount] = useState(() => {
-    // Load breakCount from localStorage on component mount
-    const savedBreakCount = localStorage.getItem('stopwatchBreakCount');
-    return savedBreakCount ? parseInt(savedBreakCount) : 0;
-  });
-  const intervalRef = useRef(null);
+  const movieList = [
+    "Iron Mask",
+    "Companion",
+    "Scorpion",
+    "Kiss Kiss Bang Bang",
+    "Family Matters(K-Drama)",
+    "Only the Brave",
+    "Forgotten(K-Drama)",
+    "Sunday",
+    "Prime Target",
+    "Get Out",
+    "Remember Me",
+    "A little Reunion(K-Drama)",
+    "Gigi & Nate",
+    "Shameless",
+    "The layover",
+    "The Guest",
+    "Front of the Class",
+    "What Women Want",
+    "Love Scout(K-Drama)",
+    "G-Force",
+    "Bhagwan Bharose",
+    "The Gambler",
+    "Family by Choice(K-Drama)",
+    "Alienoid",
+    "The Darjeeling Limited",
+    "From",
+    "Cashback",
+    "How to build a better boy?",
+    "Zombies",
+    "Ted Lasso",
+    "Under Ninja found it",
+    "Brewing Love",
+    "A Series of Unfortunate Events",
+    "Green Book",
+    "Mr. Deeds",
+    "Time Bandits",
+    "Tatlubaaz",
+    "I Not Stupid 3",
+    "Kim’s Convenience",
+    "Hometown Cha Cha Cha(K-Drama)",
+    "Queen of Tears(K-Drama)",
+    "You",
+    "The Uncanny Encounter(K-Drama)",
+    "Vincenzo(K-Drama)",
+    "Alice in Borderland(J-Drama)",
+    "Rick and Morty",
+    "Hierarchy(K-Drama)",
+    "Tale of the Nine Tailed(K-Drama)",
+    "Lucifer",
+    "Squid Game(K-Drama)",
+    "Money Hiest",
+    "Dark",
+    "Fairy Tale",
+    "The Sandman",
+    "The Witcher",
+    "Titans",
+    "Hi Papa",
+    "Lift",
+    "The Playlist",
+    "Another Life",
+    "The Last of Us",
+    "Aquaman 2",
+    "Inglorius Bastards",
+    "Fight Club",
+    "The Studio",
+    "The Wild Robot",
+    "Edge of Tomorrow",
+    "Ant man and the Wasp",
+    "Guardian of the Galaxy 3",
+    "X-Men’97",
+    "Anora",
+    "The Boys",
+    "Gen V",
+  ];
+
   const drawRandom = () => {
-    const index = Math.floor(Math.random() * 15);
-    setFindIndex(index);
+    const randomIndex = Math.floor(Math.random() * movieList.length);
+    setFindIndex(randomIndex);
     setHasDrawn(true);
   };
 
   const reset = () => {
     setHasDrawn(false);
+    setFindIndex(0);
   };
-
-  // Stopwatch functions
-  const startStopwatch = () => {
-    if (!isRunning) {
-      setIsRunning(true);
-    }
-  };
-
-  const pauseStopwatch = () => {
-    if (isRunning) {
-      setIsRunning(false);
-      // Add a new break with current time
-      const newBreakCount = breakCount + 1;
-      setBreakCount(newBreakCount);
-      setBreaks((prevBreaks) => [
-        ...prevBreaks,
-        { id: newBreakCount, time: formatTime(), rawTime: time }, // store rawTime
-      ]);
-    }
-  };
-
-  const resetStopwatch = () => {
-    setIsRunning(false);
-    setTime(0);
-    setBreaks([]);
-    setBreakCount(0);
-    // Clear localStorage when resetting
-    localStorage.removeItem('stopwatchBreaks');
-    localStorage.removeItem('stopwatchBreakCount');
-    localStorage.removeItem('stopwatchTime'); // <-- clear time
-  };
-
-  // Format time to display as MM:SS:MS
-  const formatTime = () => {
-    const minutes = Math.floor(time / 60000);
-    const seconds = Math.floor((time % 60000) / 1000);
-    const milliseconds = Math.floor((time % 1000) / 10);
-
-    return `${minutes.toString().padStart(2, "0")}:${seconds
-      .toString()
-      .padStart(2, "0")}:${milliseconds.toString().padStart(2, "0")}`;
-  };
-
-  // Effect for stopwatch
-  useEffect(() => {
-    if (isRunning) {
-      intervalRef.current = setInterval(() => {
-        setTime((prevTime) => prevTime + 10);
-      }, 10);
-    } else if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [isRunning]);
-  
-  // Save breaks to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('stopwatchBreaks', JSON.stringify(breaks));
-  }, [breaks]);
-  
-  // Save breakCount to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('stopwatchBreakCount', breakCount.toString());
-  }, [breakCount]);
-
-  // Save time to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('stopwatchTime', time.toString());
-  }, [time]);
-
-  const rewards = [
-    "Do Nothing",
-    "Watch Youtube",
-    "Do Nothing",
-    "Watch Movies",
-    "Do Nothing",
-    "Read a Book",
-    "Do Nothing",
-    "Social Media",
-    "Do Nothing",
-    "Read a Book",
-    "Watch Series",
-    "Do Nothing",
-    "Work on Fun Projects",
-    "Do Nothing",
-    "Work on Fun Projects",
-  ];
   return (
     <>
-      <div className="bg-gray-900 min-h-screen w-full flex justify-center relative">
-        <div className="absolute bottom-4 right-4 md:bottom-4 md:right-4 lg:bottom-auto lg:top-4 bg-white p-3 sm:p-4 rounded-lg shadow-lg w-[90%] max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-xs z-10">
-          <div className="text-xl sm:text-2xl font-mono mb-2 text-center">
-            {formatTime()}
-          </div>
-          <div className="flex flex-wrap sm:flex-nowrap gap-1 sm:gap-2 mb-3 justify-center">
-            <button
-              onClick={startStopwatch}
-              className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base cursor-pointer ${
-                isRunning ? "bg-gray-300" : "bg-green-500 text-white"
-              }`}
-              disabled={isRunning}
-            >
-              Start
-            </button>
-            <button
-              onClick={pauseStopwatch}
-              className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base cursor-pointer ${
-                !isRunning ? "bg-gray-300" : "bg-yellow-500 text-white"
-              }`}
-              disabled={!isRunning}
-            >
-              Pause
-            </button>
-            <button
-              onClick={resetStopwatch}
-              className="px-2 sm:px-3 py-1 rounded text-sm sm:text-base bg-red-500 text-white cursor-pointer"
-            >
-              Reset
-            </button>
-          </div>
-
-          {/* Break history - responsive */}
-          {breaks.length > 0 && (
-            <div className="mt-2 border-t pt-2">
-              <h3 className="text-xl sm:text-md font-semibold mb-1">Breaks:</h3>
-              <div className="max-h-32 sm:max-h-40 overflow-y-auto">
-                {breaks.map((breakItem, idx) => {
-                  // Calculate duration since previous break
-                  let duration = breakItem.rawTime;
-                  if (idx > 0) {
-                    duration = breakItem.rawTime - breaks[idx - 1].rawTime;
-                  }
-                  // Format duration
-                  const formatDuration = (ms) => {
-                    const minutes = Math.floor(ms / 60000);
-                    const seconds = Math.floor((ms % 60000) / 1000);
-                    const milliseconds = Math.floor((ms % 1000) / 10);
-                    return `${minutes.toString().padStart(2, "0")}:${seconds
-                      .toString()
-                      .padStart(2, "0")}:${milliseconds.toString().padStart(2, "0")}`;
-                  };
-                  return (
-                    <div
-                      key={breakItem.id}
-                      className="text-[10px] sm:text-md font-mono mb-1 flex flex-wrap sm:flex-nowrap"
-                    >
-                      <span className="text-sm font-mono">
-                        Break {breakItem.id}:
-                      </span>
-                      <span className="ml-1 text-sm">{breakItem.time}</span>
-                      <span className="ml-2 text-xs text-gray-500">(Session: {formatDuration(duration)})</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
-
+      <div className="bg-[url('./assets/wallpaper.jpg')] bg-cover bg-no-repeat bg-center min-h-screen w-full">
         <div className="flex flex-col items-center px-4 sm:px-6 md:px-8 mt-16 sm:mt-10 md:mt-0 mb-32 sm:mb-32 md:mb-32 lg:mb-0">
-          <div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white my-6 sm:my-8 md:my-10 font-mono text-center">
-              Break Rewards
+          <div className="self-start">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white my-6 sm:my-8 md:my-10 font-mono text-left">
+              Watch Next
             </h1>
           </div>
+
           <div className="flex justify-center mb-4 sm:mb-6 gap-3 sm:gap-5 my-6 sm:my-8 md:my-10">
             <button
               onClick={drawRandom}
@@ -216,12 +115,15 @@ function App() {
             </button>
           </div>
           {hasDrawn && (
-            <div className="mt-4 sm:mt-6 md:mt-8 p-4 sm:p-6 bg-white rounded-lg shadow-lg w-[90%] max-w-xs sm:max-w-sm md:max-w-md flex flex-col justify-center items-center">
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 mb-4 sm:mb-6 md:mb-10">
-                Your Reward
+            <div
+              className="mt-4 sm:mt-6 md:mt-8 p-4 sm:p-6 rounded-lg shadow-lg w-[90%] max-w-xs h-[250px] sm:max-w-sm md:max-w-md flex flex-col justify-center items-center
+            bg-white/10 backdrop-blur-sm border border-white/30 text-white"
+            >
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 md:mb-10">
+                Watch This
               </h2>
-              <p className="text-lg sm:text-xl md:text-2xl mt-2 text-gray-700 font-mono font-bold text-center">
-                {rewards[findIndex]}
+              <p className="text-lg sm:text-xl md:text-2xl mt-2 font-mono font-bold text-center">
+                {movieList[findIndex]}
               </p>
             </div>
           )}
