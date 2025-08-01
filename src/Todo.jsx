@@ -16,10 +16,7 @@ function Todo() {
 
   const addTodo = () => {
     if (input.trim() === "") return;
-    setTodos([
-      ...todos,
-      { id: Date.now(), text: input, completed: false },
-    ]);
+    setTodos([...todos, { id: Date.now(), text: input, completed: false }]);
     setInput("");
   };
 
@@ -113,7 +110,11 @@ function Todo() {
             ) : (
               <>
                 <span
-                  className={`flex-1 text-sm ${todo.completed ? "line-through text-gray-400" : "text-gray-800"}`}
+                  className={`flex-1 text-sm ${
+                    todo.completed
+                      ? "line-through text-gray-400"
+                      : "text-gray-800"
+                  }`}
                   onDoubleClick={() => startEdit(todo.id, todo.text)}
                   title="Double click to edit"
                 >
@@ -150,7 +151,12 @@ function Todo() {
           onClick={() => setShowModal(true)}
           aria-label="Open Todo Modal"
         >
-          <span className="flex items-center justify-center w-full h-full" style={{lineHeight: 1}}>+</span>
+          <span
+            className="flex items-center justify-center w-full h-full"
+            style={{ lineHeight: 1 }}
+          >
+            +
+          </span>
         </button>
         {showModal && (
           <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-40">

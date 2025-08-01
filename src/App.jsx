@@ -183,8 +183,39 @@ function App() {
   return (
     <>
       <div className="bg-gray-900 min-h-screen w-full flex justify-center relative">
-        {/* Todo Card - bottom left */}
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-center">
+          <h1 className="text-3xl sm:text-4xl font-mono font-bold text-white mb-6">
+            Check Reward
+          </h1>
 
+          <div className="flex justify-center gap-4 mb-6 mt-12">
+            <button
+              onClick={drawRandom}
+              className="bg-white text-black font-semibold py-2 px-5 rounded-md shadow hover:bg-gray-200 transition"
+            >
+              Draw
+            </button>
+            <button
+              onClick={reset}
+              className="bg-white text-black font-semibold py-2 px-5 rounded-md shadow hover:bg-gray-200 transition"
+            >
+              Reset
+            </button>
+          </div>
+
+          {hasDrawn && (
+            <div className="bg-white text-center p-6 rounded-lg mt-16 shadow-lg w-80 mx-auto h-[180px] flex justify-center flex-col">
+              <h2 className="text-3xl font-semibold mb-4 text-gray-800 font-sans">
+                Your Reward
+              </h2>
+              <p className="text-xl font-mono font-semibold text-gray-700 tracking-wide">
+                {rewards[findIndex]}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Todo Card - bottom left */}
         <Todo />
         {/* Stopwatch Card - bottom right */}
         <div className="absolute bottom-4 right-4 md:bottom-4 md:right-4 lg:bottom-auto lg:top-4 bg-white p-3 sm:p-4 rounded-lg shadow-lg w-[90%] max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-s z-10">
