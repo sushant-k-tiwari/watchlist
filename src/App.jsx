@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Todo from "./Todo";
+import Typewriter from "typewriter-effect";
 
 function App() {
   const [findIndex, setFindIndex] = useState(0);
@@ -10,22 +11,27 @@ function App() {
     const saved = localStorage.getItem("stopwatchAccumulatedTime");
     return saved ? parseInt(saved) : 0;
   });
+
   const [startTimestamp, setStartTimestamp] = useState(() => {
     const saved = localStorage.getItem("stopwatchStartTimestamp");
     return saved ? parseInt(saved) : null;
   });
+
   const [isRunning, setIsRunning] = useState(() => {
     const saved = localStorage.getItem("stopwatchIsRunning");
     return saved === "true";
   });
+
   const [breaks, setBreaks] = useState(() => {
     const savedBreaks = localStorage.getItem("stopwatchBreaks");
     return savedBreaks ? JSON.parse(savedBreaks) : [];
   });
+
   const [breakCount, setBreakCount] = useState(() => {
     const savedBreakCount = localStorage.getItem("stopwatchBreakCount");
     return savedBreakCount ? parseInt(savedBreakCount) : 0;
   });
+
   const [displayTime, setDisplayTime] = useState(0);
   const intervalRef = useRef(null);
 
@@ -180,35 +186,39 @@ function App() {
     "Do Nothing",
     "Work on Fun Projects",
   ];
+
   return (
     <>
-      <div className="bg-gray-900 min-h-screen w-full flex justify-center relative">
+      <div className="bg-[#003631] min-h-screen w-full flex justify-center relative">
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-center">
-          <h1 className="text-3xl sm:text-4xl font-mono font-bold text-white mb-6">
+          <h1
+            className="text-3xl sm:text-4xl font-mono font-bold text-[#ffeda8] mb-6"
+            style={{ fontFamily: "docade" }}
+          >
             Check Reward
           </h1>
 
           <div className="flex justify-center gap-4 mb-6 mt-12">
             <button
               onClick={drawRandom}
-              className="bg-white text-black font-semibold py-2 px-5 rounded-md shadow hover:bg-gray-200 transition"
+              className="bg-[#ffeda8] text-[#003631] font-semibold font-[docade] py-3 px-6 rounded-md shadow hover:bg-[#29504a] hover:text-[#ffeda8] transition"
             >
               Draw
             </button>
             <button
               onClick={reset}
-              className="bg-white text-black font-semibold py-2 px-5 rounded-md shadow hover:bg-gray-200 transition"
+              className="bg-[#29504a] text-[#ffeda8] font-semibold font-[docade] py-3 px-6 rounded-md shadow hover:bg-[#ffeda8] hover:text-[#003631] transition"
             >
               Reset
             </button>
           </div>
 
           {hasDrawn && (
-            <div className="bg-white text-center p-6 rounded-lg mt-16 shadow-lg w-80 mx-auto h-[180px] flex justify-center flex-col">
-              <h2 className="text-3xl font-semibold mb-4 text-gray-800 font-sans">
+            <div className="bg-[#ffeda8] text-center p-6 rounded-lg mt-16 shadow-lg w-80 mx-auto h-[180px] flex justify-center flex-col">
+              <h2 className="text-2xl font-semibold mb-4 text[#003631] font-[docade]">
                 Your Reward
               </h2>
-              <p className="text-xl font-mono font-semibold text-gray-700 tracking-wide">
+              <p className="text-2xl font-[bright] font-semibold text-gray-900 tracking-wide">
                 {rewards[findIndex]}
               </p>
             </div>
@@ -218,8 +228,8 @@ function App() {
         {/* Todo Card - bottom left */}
         <Todo />
         {/* Stopwatch Card - bottom right */}
-        <div className="absolute bottom-4 right-4 md:bottom-4 md:right-4 lg:bottom-auto lg:top-4 bg-white p-3 sm:p-4 rounded-lg shadow-lg w-[90%] max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-s z-10">
-          <div className="text-xl sm:text-2xl font-mono mb-2 text-center">
+        <div className="absolute bottom-4 right-4 md:bottom-4 md:right-4 lg:bottom-auto lg:top-4 bg-[#ffeda8] p-3 sm:p-4 rounded-lg shadow-lg w-[90%] max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-s z-10">
+          <div className="text-xl sm:text-2xl font-[docade] mb-2 text-center">
             {(() => {
               const t = formatTimeParts(displayTime);
               return (
@@ -232,8 +242,8 @@ function App() {
           <div className="flex flex-wrap sm:flex-nowrap gap-1 sm:gap-2 mb-3 justify-center">
             <button
               onClick={startStopwatch}
-              className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base cursor-pointer ${
-                isRunning ? "bg-gray-300" : "bg-green-500 text-white"
+              className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base cursor-pointer font-[docade] ${
+                isRunning ? "bg-gray-300" : "bg-[#1e7637] text-white"
               }`}
               disabled={isRunning}
             >
@@ -241,7 +251,7 @@ function App() {
             </button>
             <button
               onClick={pauseStopwatch}
-              className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base cursor-pointer ${
+              className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base cursor-pointer font-[docade] ${
                 !isRunning ? "bg-gray-300" : "bg-yellow-500 text-white"
               }`}
               disabled={!isRunning}
@@ -250,7 +260,7 @@ function App() {
             </button>
             <button
               onClick={resetStopwatch}
-              className="px-2 sm:px-3 py-1 rounded text-sm sm:text-base bg-red-500 text-white cursor-pointer"
+              className="px-2 sm:px-3 py-1 font-[docade] rounded text-sm sm:text-base bg-red-500 text-white cursor-pointer"
             >
               Reset
             </button>
@@ -259,7 +269,9 @@ function App() {
           {/* Break history - responsive */}
           {breaks.length > 0 && (
             <div className="mt-2 border-t pt-2">
-              <h3 className="text-xl sm:text-md font-semibold mb-1">Breaks:</h3>
+              <h3 className="text-2xl sm:text-md font-semibold mb-1 font-[bright]">
+                Breaks:
+              </h3>
               <div className="max-h-32 sm:max-h-40 overflow-y-auto">
                 {breaks.map((breakItem, idx) => {
                   // Calculate duration since previous break
@@ -288,15 +300,15 @@ function App() {
                   return (
                     <div
                       key={breakItem.id}
-                      className="text-[10px] sm:text-md font-mono mb-1 flex flex-wrap sm:flex-nowrap"
+                      className="font-[bright] sm:text-md mb-1 flex flex-wrap sm:flex-nowrap"
                     >
-                      <span className="text-sm font-mono">
+                      <span className="text-lg font-[bright]">
                         Break {breakItem.id}:
                       </span>
-                      <span className="ml-1 text-sm">
+                      <span className="ml-1 text-lg">
                         {formatDurationPlain(breakItem.rawTime)}
                       </span>
-                      <span className="ml-2 text-xs text-gray-500">
+                      <span className="ml-2 text-lg text-gray-500">
                         (Session: {formatDurationPlain(duration)})
                       </span>
                     </div>

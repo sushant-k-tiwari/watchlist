@@ -16,8 +16,11 @@
     "express": "^5.1.0",
     "lucide-react": "^0.532.0",
     "react": "^19.1.0",
+    "react-awesome-reveal": "^4.3.1",
     "react-dom": "^19.1.0",
+    "react-vivus": "^0.0.2",
     "tailwindcss": "^4.1.11",
+    "typewriter-effect": "^2.22.0",
     "ytmusic-api": "^5.3.0"
   },
   "devDependencies": {

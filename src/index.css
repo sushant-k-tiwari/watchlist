@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: "docade";
+  src: url("./fonts/docade-regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "bright";
+  src: url("./fonts/Bright-DEMO.otf") format("opentype");
+}

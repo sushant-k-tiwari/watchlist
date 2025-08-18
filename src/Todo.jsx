@@ -55,11 +55,13 @@ function Todo() {
 
   // The Todo Card UI
   const todoCard = (
-    <div className="w-[100%] max-w-xs sm:max-w-sm md:max-w-md bg-white rounded-lg shadow-lg p-4 flex flex-col gap-2">
-      <h2 className="text-lg font-bold mb-2 text-gray-800">Daily Todos</h2>
+    <div className="w-[100%] max-w-xs sm:max-w-sm md:max-w-md bg-[#ffeda8] rounded-lg shadow-lg p-4 flex flex-col gap-2">
+      <h2 className="text-lg font-bold mb-2 text-[#003631] font-[docade]">
+        Daily Todos
+      </h2>
       <div className="flex gap-2 mb-2">
         <input
-          className="flex-1 border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="flex-1 border border-[#fdfdc9] rounded px-2 py-1 text-lg font-[bright] focus:outline-none focus:ring-1 focus:ring-[#003631]"
           type="text"
           placeholder="Add a todo..."
           value={input}
@@ -67,7 +69,7 @@ function Todo() {
           onKeyDown={handleKeyDown}
         />
         <button
-          className="bg-blue-500 cursor-pointer text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+          className="bg-[#003631] cursor-pointer font-[docade] text-white px-4 py-2 rounded hover:bg-[#29504a] text-sm"
           onClick={addTodo}
         >
           Add
@@ -75,23 +77,25 @@ function Todo() {
       </div>
       <ul className="flex flex-col gap-2 max-h-48 overflow-y-auto">
         {todos.length === 0 && (
-          <li className="text-gray-400 text-sm text-center">No todos yet!</li>
+          <li className="text-[#29504a] text-lg text-center font-medium font-[bright]">
+            No todos yet!
+          </li>
         )}
         {todos.map((todo) => (
           <li
             key={todo.id}
-            className="flex items-center gap-2 bg-gray-100 rounded px-2 py-1"
+            className="flex items-center gap-2 bg-[#fff4c6] rounded px-4 py-2"
           >
             <input
               type="checkbox"
               checked={todo.completed}
               onChange={() => toggleTodo(todo.id)}
-              className="accent-blue-500 cursor-pointer"
+              className="accent-[#003631] cursor-pointer"
             />
             {editId === todo.id ? (
               <>
                 <input
-                  className="flex-1 border border-gray-300 rounded px-1 py-0.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="flex-1 border border-gray-300 rounded px-1 py-0.5 font-[bright] text-lg focus:outline-none focus:border-0"
                   value={editValue}
                   onChange={(e) => setEditValue(e.target.value)}
                   onBlur={() => saveEdit(todo.id)}
@@ -101,7 +105,7 @@ function Todo() {
                   autoFocus
                 />
                 <button
-                  className="text-xs cursor-pointer text-green-600 font-bold px-1"
+                  className="text-xs cursor-pointer text-green-600 font-bold px-1 font-[docade]"
                   onClick={() => saveEdit(todo.id)}
                 >
                   Save
@@ -110,9 +114,9 @@ function Todo() {
             ) : (
               <>
                 <span
-                  className={`flex-1 text-sm ${
+                  className={`flex-1 text-lg font-[bright] curdor-pointer ${
                     todo.completed
-                      ? "line-through text-gray-400"
+                      ? "line-through text-gray-800"
                       : "text-gray-800"
                   }`}
                   onDoubleClick={() => startEdit(todo.id, todo.text)}
@@ -121,14 +125,14 @@ function Todo() {
                   {todo.text}
                 </span>
                 <button
-                  className="text-xs cursor-pointer text-red-500 font-bold px-1"
+                  className="text-xs cursor-pointer text-red-500 font-bold px-1 font-[docade]"
                   onClick={() => deleteTodo(todo.id)}
                   title="Delete"
                 >
                   Delete
                 </button>
                 <button
-                  className="text-xs cursor-pointer text-blue-500 font-bold px-1"
+                  className="text-xs cursor-pointer text-blue-500 font-bold px-1 font-[docade]"
                   onClick={() => startEdit(todo.id, todo.text)}
                   title="Edit"
                 >
@@ -147,7 +151,7 @@ function Todo() {
       {/* For small screens: show floating + button, open modal */}
       <div className="sm:hidden fixed left-4 bottom-4 z-30">
         <button
-          className="bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-3xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 hover:bg-blue-700 transition-all duration-150 p-0"
+          className="bg-[#ffeda8] text-[#003631] w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-3xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 hover:bg-blue-700 transition-all duration-150 p-0"
           onClick={() => setShowModal(true)}
           aria-label="Open Todo Modal"
         >
