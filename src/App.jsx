@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Todo from "./Todo";
-import Typewriter from "typewriter-effect";
+import { motion, spring } from "motion/react";
 
 function App() {
   const [findIndex, setFindIndex] = useState(0);
@@ -199,29 +199,39 @@ function App() {
           </h1>
 
           <div className="flex justify-center gap-4 mb-6 mt-12">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1, transition: { duration: 0.01 } }}
+              whileTap={{ scale: 0.9 }}
               onClick={drawRandom}
               className="bg-[#ffeda8] text-[#003631] font-semibold font-[docade] py-3 px-6 rounded-md shadow hover:bg-[#29504a] hover:text-[#ffeda8] transition"
             >
               Draw
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.1, transition: { duration: 0.01 } }}
+              whileTap={{ scale: 0.9 }}
               onClick={reset}
               className="bg-[#29504a] text-[#ffeda8] font-semibold font-[docade] py-3 px-6 rounded-md shadow hover:bg-[#ffeda8] hover:text-[#003631] transition"
             >
               Reset
-            </button>
+            </motion.button>
           </div>
 
           {hasDrawn && (
-            <div className="bg-[#ffeda8] text-center p-6 rounded-lg mt-16 shadow-lg w-80 mx-auto h-[180px] flex justify-center flex-col">
+            <motion.div
+              //want to add a spring animation motion
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: "spring", stiffness: 150, damping: 8 }}
+              className="bg-[#ffeda8] text-center p-6 rounded-lg mt-16 shadow-lg w-80 mx-auto h-[180px] flex justify-center flex-col"
+            >
               <h2 className="text-2xl font-semibold mb-4 text[#003631] font-[docade]">
                 Your Reward
               </h2>
               <p className="text-2xl font-[bright] font-semibold text-gray-900 tracking-wide">
                 {rewards[findIndex]}
               </p>
-            </div>
+            </motion.div>
           )}
         </div>
 
