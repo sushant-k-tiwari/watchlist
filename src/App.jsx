@@ -203,7 +203,7 @@ function App() {
               whileHover={{ scale: 1.1, transition: { duration: 0.01 } }}
               whileTap={{ scale: 0.9 }}
               onClick={drawRandom}
-              className="bg-[#ffeda8] text-[#003631] font-semibold font-[docade] py-3 px-6 rounded-md shadow hover:bg-[#29504a] hover:text-[#ffeda8] transition"
+              className="bg-[#ffeda8] text-[#003631] cursor-pointer font-semibold font-[docade] py-3 px-6 rounded-md shadow hover:bg-[#29504a] hover:text-[#ffeda8] transition"
             >
               Draw
             </motion.button>
@@ -211,7 +211,7 @@ function App() {
               whileHover={{ scale: 1.1, transition: { duration: 0.01 } }}
               whileTap={{ scale: 0.9 }}
               onClick={reset}
-              className="bg-[#29504a] text-[#ffeda8] font-semibold font-[docade] py-3 px-6 rounded-md shadow hover:bg-[#ffeda8] hover:text-[#003631] transition"
+              className="bg-[#29504a] text-[#ffeda8] font-semibold cursor-pointer font-[docade] py-3 px-6 rounded-md shadow hover:bg-[#ffeda8] hover:text-[#003631] transition"
             >
               Reset
             </motion.button>
