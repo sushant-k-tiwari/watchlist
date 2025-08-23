@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-
-// ⬇️ dnd-kit imports (added)
 import {
   DndContext,
   closestCenter,
@@ -194,16 +192,15 @@ function Todo() {
         </button>
       </div>
 
-      {/* ⬇️ dnd-kit wrappers (do not affect your other features) */}
       <DndContext
-        sensors={sensors} // ⬅️ use hold-to-drag sensor
+        sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={({ active, over }) => {
           if (!over) return;
           if (active.id !== over.id) {
             const oldIndex = todos.findIndex((t) => t.id === active.id);
             const newIndex = todos.findIndex((t) => t.id === over.id);
-            setTodos((items) => arrayMove(items, oldIndex, newIndex)); // ⬅️ reorders list
+            setTodos((items) => arrayMove(items, oldIndex, newIndex)); // reorders list
           }
         }}
       >
@@ -211,7 +208,7 @@ function Todo() {
           items={todos.map((t) => t.id)}
           strategy={verticalListSortingStrategy}
         >
-          <ul className="flex flex-col gap-2 max-h-48 overflow-y-auto">
+          <ul className="flex flex-col gap-2 max-h-64 overflow-y-auto">
             {todos.length === 0 && (
               <li className="text-[#29504a] text-lg text-center font-medium font-[bright]">
                 No todos yet!
