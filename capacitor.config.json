@@ -1,0 +1,12 @@
+{
+  "appId": "com.sushant.watchnext",
+  "appName": "Watch Next",
+  "webDir": "dist",
+  "backgroundColor": "#141414",
+  "plugins": {
+    "SystemBars": {
+      "style": "DARK",
+      "initialViewportFitValueHint": "cover"
+    }
+  }
+}

@@ -9,4 +9,7 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 )
 
-if (import.meta.env.PROD && "serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js");
+// The PWA needs the service worker for offline use; the Capacitor APK already bundles every file.
+if (import.meta.env.PROD && "serviceWorker" in navigator && !window.Capacitor?.isNativePlatform()) {
+  navigator.serviceWorker.register("/sw.js");
+}
